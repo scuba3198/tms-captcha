@@ -14,10 +14,16 @@ Demo
 
 # Building:
 * Clone the repository!<br/>
-* Install the dependencies with: `yarn install`<br/>
-* Build Chrome version: `yarn build:chrome`<br/>
-* Build Firefox version: `yarn build:firefox`<br/>
-* Build both versions: `yarn build:all`<br/>
+* Install the dependencies with: `yarn install` or `npm install`<br/>
+* Build Chrome version: `yarn build:chrome` or `npm run build:chrome`<br/>
+* Build Firefox version: `yarn build:firefox` or `npm run build:firefox`<br/>
+* Build both versions: `yarn build:all` or `npm run build:all`<br/>
+
+### Loading in Browser (Chrome/Brave/Edge):
+1. Go to `brave://extensions/` or `chrome://extensions/`.
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select the **`dist-chrome`** folder.
 
 # Publishing to Firefox Add-ons:
 To publish the extension to Firefox Add-ons:
