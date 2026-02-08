@@ -5,13 +5,10 @@
   "author": "Daze <dazehere@yandex.com>",
   "license": "MIT",
   "devDependencies": {
-    "@parcel/config-webextension": "^2.8.2",
-    "@parcel/transformer-image": "^2.8.2",
     "@types/chrome": "^0.0.208",
     "@types/firefox-webext-browser": "^111.0.1",
     "@types/node": "^18.11.18",
     "buffer": "^5.5.0",
-    "parcel": "^2.8.2",
     "web-ext": "^8.4.0"
   },
   "dependencies": {
@@ -19,8 +16,8 @@
     "image-js": "^0.35.2"
   },
   "scripts": {
-    "start:chrome": "parcel watch src/manifest.chrome.json --host localhost --config @parcel/config-webextension",
-    "start:firefox": "parcel watch src/manifest.firefox.json --host localhost --config @parcel/config-webextension",
+    "start:chrome": "node scripts/build-chrome.js",
+    "start:firefox": "node scripts/build-firefox.js",
     "build:chrome": "node scripts/build-chrome.js",
     "build:firefox": "node scripts/build-firefox.js",
     "build:all": "npm run build:chrome && npm run build:firefox",

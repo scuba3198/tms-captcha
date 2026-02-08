@@ -2,10 +2,8 @@
 node_modules/
 
 # Build artifacts
-dist/
 dist-chrome/
 dist-firefox/
-.parcel-cache/
 web-ext-artifacts/
 
 # TypeScript
