@@ -26,7 +26,7 @@ If you want to build the extension manually:
 
 1.  **Clone** the repository:
     ```bash
-    git clone https://github.com/arpandaze/tms-captcha.git
+    git clone https://github.com/scuba3198/tms-captcha.git
     cd tms-captcha
     ```
 2.  **Install** dependencies:
@@ -55,4 +55,4 @@ After building, click **Load unpacked** in your browser's extension settings and
     ```
 
 ---
-<p align="center">Developed with ❤️ for the NEPSE community.</p>
+<p align="center">Developed with ❤️ by Arpan Koirala & Mumukshu D.C for the NEPSE community.</p>
