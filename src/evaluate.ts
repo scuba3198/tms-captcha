@@ -22,7 +22,7 @@ if (typeof window === "object") {
   DATA_PATH = `./src/${DATA_PATH}`;
 }
 
-const FACTORS = [1, 3, 2, 8, 3];
+const FACTORS = [1, 2, 2, 2, 4, 3, 3, 3, 3];
 
 enum Kind {
   Bold,
@@ -56,7 +56,7 @@ async function solve_captcha(
 
         item.map((indv_property, index) => {
           abs_sum +=
-            FACTORS[index] * Math.abs(character[1][index] - indv_property);
+            (FACTORS[index] || 1) * Math.abs(character[1][index] - indv_property);
         });
 
         return [character[0], abs_sum];
@@ -64,7 +64,8 @@ async function solve_captcha(
 
     let sorted_values = sim.sort((a, b) => a[1] - b[1]);
 
-    if (sorted_values[0][1] > 60 ||
+    // Increased threshold slightly due to more factors (9 instead of 5)
+    if (sorted_values[0][1] > 100 ||
       sorted_values[1][1] - sorted_values[0][1] < 5) {
       if (kind) {
         return {
@@ -94,12 +95,16 @@ async function solve_captcha(
 Image is first splitted into individual characters by finding empty line between
 characters.
 
-Then each character is evalauated based on 5 factors:
+Then each character is evalauated based on 9 factors:
   - Average Pixel Value
-  - Horizontal Length of Image
   - Average Pixel of Vertical Left Half of Image
   - Average Pixel of Horizontal Top Half of Image
   - Average Pixel of Horizontal Bottom Half of Image
+  - Horizontal Length of Image
+  - Top Left Quadrant Average
+  - Top Right Quadrant Average
+  - Bottom Left Quadrant Average
+  - Bottom Right Quadrant Average
 */
 async function evaluate_captcha(img: Image): Promise<Array<Array<number>>> {
   let cleaned = await clean_image(img);
@@ -142,7 +147,16 @@ async function evaluate_captcha(img: Image): Promise<Array<Array<number>>> {
     let hAvg = htopavg(temp_img);
     let hbtAvg = hbotavg(temp_img);
 
-    averages.push([average, vAvg, hAvg, hbtAvg, char_mat.length / 35]);
+    // Squadrant-based averages
+    let tlAvg = quadrantAvg(temp_img, true, true);
+    let trAvg = quadrantAvg(temp_img, false, true);
+    let blAvg = quadrantAvg(temp_img, true, false);
+    let brAvg = quadrantAvg(temp_img, false, false);
+
+    averages.push([
+      average, vAvg, hAvg, hbtAvg, char_mat.length / 35,
+      tlAvg, trAvg, blAvg, brAvg
+    ]);
   });
 
   return averages;
@@ -178,6 +192,27 @@ async function clean_image(img: Image) {
 
   cleaned = cleaned.crop({ y: 24, x: 75, height: 35, width: 130 });
   return cleaned;
+}
+
+function quadrantAvg(char_img: Image, left: boolean, top: boolean) {
+  const midX = Math.floor(char_img.width / 2);
+  const midY = Math.floor(char_img.height / 2);
+
+  const cropX = left ? 0 : midX;
+  const cropY = top ? 0 : midY;
+  const cropWidth = left ? midX : (char_img.width - midX);
+  const cropHeight = top ? midY : (char_img.height - midY);
+
+  if (cropWidth <= 0 || cropHeight <= 0) return 0;
+
+  let quadrant = char_img.crop({
+    x: cropX,
+    y: cropY,
+    width: cropWidth,
+    height: cropHeight
+  });
+
+  return (quadrant.getSum().reduce((acc, val) => acc + val) / 256);
 }
 
 // Average pixel value of horizontal top half
