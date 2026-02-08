@@ -16,6 +16,12 @@
 
 ## 🛠️ Building from Source
 
+If you want to build the extension manually:
+
+1.  **Clone** the repository:
+    ```bash
+    git clone https://github.com/scuba3198/tms-captcha.git
+    cd tms-captcha
     ```
 2.  **Install** dependencies:
     ```bash
