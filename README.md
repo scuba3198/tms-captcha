@@ -6,6 +6,12 @@
   <img src="https://user-images.githubusercontent.com/46302068/215273678-4ba5f4fc-01b5-4ab6-bad9-429388e4d366.gif" width="450" alt="TMS Captcha Demo"/>
 </p>
 
+## ✨ New in v0.4.7
+- **High-Precision Model**: Upgraded from 5 to **9-factor spatial analysis**. Includes quadrant-level density checks for significantly better character recognition.
+- **Improved Resiliency**: Increased automatic re-solve attempts (up to 10) for distorted captchas.
+- **Instant Clear**: Input fields now clear immediately upon refresh to prevent stale data.
+- **Race Condition Fix**: Implemented request ID tracking to ensure only the latest captcha result is applied.
+
 ## 🚀 Installation
 
 1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
