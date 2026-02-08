@@ -2,7 +2,7 @@
   "name": "tms-captcha",
   "version": "0.4.7",
   "repository": "git@github.com:arpandaze/tms-captcha.git",
-  "author": "Daze <dazehere@yandex.com>",
+  "author": "Daze <dazehere@yandex.com>, Mumukshu D.C <phoenixrising656@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/chrome": "^0.0.208",

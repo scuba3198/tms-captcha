@@ -2,7 +2,7 @@
   "name": "TMSCaptcha",
   "description": "Extension to autofill captcha on Nepse TMS login page. Makes logging into TMS faster and more convenient.",
   "version": "0.4.7",
-  "author": "Daze <dazehere@yandex.com>",
+  "author": "Daze <dazehere@yandex.com>, Mumukshu D.C <phoenixrising656@gmail.com>",
   "homepage_url": "https://github.com/arpandaze/tms-captcha",
   "manifest_version": 2,
   "license": "MIT",
