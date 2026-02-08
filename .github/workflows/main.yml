@@ -34,7 +34,7 @@ jobs:
       - name: Create Zip
         run: |
           cd dist-chrome
-          zip -r ../TMSCaptcha-chrome.zip .
+          zip -r ../TMSCaptcha-chrome.zip *
           cd ..
 
       - name: Upload Artifact
