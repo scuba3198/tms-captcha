@@ -86,4 +86,4 @@ After building, click **Load unpacked** in your browser's extension settings and
     ```
 
 ---
-<p align="center">Developed with ❤️ by for the NEPSE community.</p>
+<p align="center">Developed with ❤️ for the NEPSE community.</p>
