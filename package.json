@@ -21,7 +21,7 @@
   "scripts": {
     "start:chrome": "parcel watch src/manifest.chrome.json --host localhost --config @parcel/config-webextension",
     "start:firefox": "parcel watch src/manifest.firefox.json --host localhost --config @parcel/config-webextension",
-    "build:chrome": "rm -rf dist-chrome && parcel build src/manifest.chrome.json --dist-dir dist-chrome --no-content-hash --no-source-maps && cp src/manifest.chrome.json dist-chrome/manifest.json",
+    "build:chrome": "parcel build src/manifest.chrome.json --dist-dir dist-chrome --no-content-hash --no-source-maps",
     "build:firefox": "bash scripts/build-firefox.sh",
     "build:all": "yarn build:chrome && yarn build:firefox",
     "zip:firefox": "cd dist-firefox && web-ext build --overwrite-dest --artifacts-dir=../web-ext-artifacts",
