@@ -32,6 +32,15 @@ async function waitForImageLoad(img: HTMLImageElement): Promise<boolean> {
 
 let latestRequestId = 0;
 
+function clearCaptchaField() {
+  const captcha_field = document.getElementById("captchaEnter") as HTMLInputElement;
+  if (captcha_field) {
+    captcha_field.value = "";
+    captcha_field.dispatchEvent(new Event("input"));
+    console.log("[TMSCaptcha] Input field cleared");
+  }
+}
+
 async function handle_result(result: SolveResult) {
   switch (result.type) {
     case ResultTypes.Success: {
@@ -46,12 +55,14 @@ async function handle_result(result: SolveResult) {
     }
 
     case ResultTypes.LowConfidence: {
-      console.log(`[TMSCaptcha] Failed to solve due to low confidence. Reloading!`);
+      console.log(`[TMSCaptcha] Failed to solve due to low confidence. Cleaning field and reloading.`);
+      clearCaptchaField();
       break;
     }
 
     case ResultTypes.InvalidLength: {
-      console.log(`[TMSCaptcha] Found result "${result.value}" but length < 6. Reloading!`);
+      console.log(`[TMSCaptcha] Found result "${result.value}" but length < 6. Cleaning field and reloading.`);
+      clearCaptchaField();
       break;
     }
   }
@@ -75,7 +86,8 @@ async function processCaptcha(captchaImg: HTMLImageElement) {
   }
 
   if (captcha_blob_url.includes("captcha-image.jpg")) {
-    console.log("[TMSCaptcha] Placeholder captcha detected");
+    console.log("[TMSCaptcha] Placeholder captcha detected - clearing field");
+    clearCaptchaField();
     return;
   }
 
@@ -122,7 +134,12 @@ async function initializeCaptchaSolver() {
   const observer = new MutationObserver(async (mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
-        console.log("[TMSCaptcha] Captcha image changed, reprocessing...");
+        const newSrc = (mutation.target as HTMLImageElement).getAttribute('src');
+        console.log(`[TMSCaptcha] Image src changed to: ${newSrc?.substring(0, 50)}...`);
+
+        // IMPORTANT: Clear the field immediately when the image starts changing
+        clearCaptchaField();
+
         await processCaptcha(mutation.target as HTMLImageElement);
       }
     }
