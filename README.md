@@ -12,6 +12,37 @@
 - **Instant Clear**: Input fields now clear immediately upon refresh to prevent stale data.
 - **Race Condition Fix**: Implemented request ID tracking to ensure only the latest captcha result is applied.
 
+## 📝 TL;DR
+TMS Captcha Solver is a lightweight browser extension that uses a custom **spatial density analysis model** to identify characters in NEPSE TMS captchas. It bypasses background noise, segments the image, and matches patterns against a pre-trained dataset in real-time, all within your browser.
+
+<details>
+<summary><b>🔍 Technical Deep Dive: How it Works Under the Hood</b></summary>
+
+### 1. Preprocessing & Noise Reduction
+The extension first captures the captcha image as a Base64 URI. It performs **background subtraction** using a reference "empty" captcha image to isolate character pixels from the noisy background. The resulting image is then thresholded (binarized) for cleaner analysis.
+
+### 2. Character Segmentation
+Using a vertical scanning algorithm, the system identifies "empty" columns to split the single captcha strip into individual character matrices. It handles both **Bold** and **Slim** font variants used by TMS.
+
+### 3. 9-Factor Spatial Analysis
+Instead of complex OCR or Neural Networks, this project uses a high-performance **feature extraction** approach. Each character is evaluated across 9 distinct factors:
+- **Global Density**: Average pixel value of the whole character.
+- **Bisectional Density**: Average pixel values of the Left/Right and Top/Bottom halves.
+- **Quadrant Density**: Average pixel values of the Top-Left, Top-Right, Bottom-Left, and Bottom-Right quadrants.
+- **Aspect Ratio**: The width-to-height ratio of the character container.
+
+### 4. Character Recognition (KNN-Style)
+The extracted 9-factor vector is compared against a local dataset (`bold_data.json` and `slim_data.json`). It calculates a **Weighted Euclidean Distance** between the current character and every known character in the dataset. 
+- The factor weights (`FACTORS`) are tuned to prioritize certain spatial features (like quadrant density) over others.
+- The character with the lowest "error" (distance) is selected, provided it meets a confidence threshold.
+
+### 5. Browser Integration
+- **MutationObserver**: Monitors the DOM for captcha image refreshes.
+- **Request Tracking**: Uses incrementing Request IDs to prevent race conditions where a slow solve for an old captcha might overwrite a newer one.
+- **Input Simulation**: Dispatches native `input` events after filling the field to ensure the underlying React/Angular state of the TMS site is updated.
+
+</details>
+
 ## 🚀 Installation
 
 1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
