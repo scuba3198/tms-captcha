@@ -1,5 +1,0 @@
-{
-  "extends": "@parcel/config-webextension",
-  "namers": ["@parcel/namer-default"],
-  "reporters": ["@parcel/reporter-cli"]
-}
