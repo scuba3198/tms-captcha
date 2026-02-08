@@ -8,7 +8,7 @@
 
 ## 🚀 Installation
 
-1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/arpandaze/tms-captcha/releases) page.
+1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
 2.  **Extract** the ZIP file to a folder.
 3.  Open Brave/Chrome and go to `brave://extensions` or `chrome://extensions`.
 4.  Enable **Developer mode**.
