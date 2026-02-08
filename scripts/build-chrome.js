@@ -38,6 +38,10 @@ console.log('Generating manifest.json...');
 const manifestPath = path.join(srcDir, 'manifest.chrome.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
+// Sync version with package.json
+const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
+manifest.version = pkg.version;
+
 // Correct paths for the bundled extension
 manifest.background.service_worker = 'background.chrome.js';
 manifest.content_scripts[0].js = ['content-script.js'];

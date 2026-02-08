@@ -1,7 +1,7 @@
 {
   "name": "TMSCaptcha",
   "description": "Extension to autofill captcha on Nepse TMS login page. Makes logging into TMS faster and more convenient.",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": "Daze <dazehere@yandex.com>",
   "homepage_url": "https://github.com/arpandaze/tms-captcha",
   "manifest_version": 2,
@@ -11,21 +11,34 @@
     "96": "assets/icon-96.png"
   },
   "background": {
-    "scripts": ["background.firefox.js"],
+    "scripts": [
+      "background.firefox.js"
+    ],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": ["https://*.nepsetms.com.np/login"],
-      "js": ["content-script.js", "evaluate.js", "bold_data.js", "slim_data.js"]
+      "matches": [
+        "https://*.nepsetms.com.np/login"
+      ],
+      "js": [
+        "content-script.js",
+        "evaluate.js",
+        "bold_data.js",
+        "slim_data.js"
+      ]
     }
   ],
-  "web_accessible_resources": ["assets/empty.jpg"],
+  "web_accessible_resources": [
+    "assets/empty.jpg"
+  ],
   "browser_specific_settings": {
     "gecko": {
       "id": "tmscaptcha@arpankoirala.com.np",
       "strict_min_version": "100.0"
     }
   },
-  "permissions": ["https://*.nepsetms.com.np/*"]
+  "permissions": [
+    "https://*.nepsetms.com.np/*"
+  ]
 }
