@@ -8,7 +8,7 @@
 
 ## 🚀 Installation
 
-1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
+1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/arpandaze/tms-captcha/releases) page.
 2.  **Extract** the ZIP file to a folder.
 3.  Open Brave/Chrome and go to `brave://extensions` or `chrome://extensions`.
 4.  Enable **Developer mode**.
@@ -20,7 +20,7 @@ If you want to build the extension manually:
 
 1.  **Clone** the repository:
     ```bash
-    git clone https://github.com/scuba3198/tms-captcha.git
+    git clone https://github.com/arpandaze/tms-captcha.git
     cd tms-captcha
     ```
 2.  **Install** dependencies:
