@@ -1,7 +1,7 @@
 import { solve_captcha } from "./evaluate";
 import { ResultTypes, SolveResult } from "./interface";
 
-const RELOAD_LIMIT = 3;
+const RELOAD_LIMIT = 10;
 const INITIAL_RETRY_LIMIT = 5;
 const RETRY_DELAY = 500; // ms
 
@@ -45,6 +45,13 @@ async function handle_result(result: SolveResult) {
   switch (result.type) {
     case ResultTypes.Success: {
       console.log(`[TMSCaptcha] Solved: ${result.value}`);
+
+      // Reset reload counter on successful solve
+      if (reload_counter > 0) {
+        console.log(`[TMSCaptcha] Resetting reload counter (was ${reload_counter})`);
+        reload_counter = 0;
+      }
+
       const captcha_field = document.getElementById("captchaEnter") as HTMLInputElement;
       if (captcha_field) {
         captcha_field.value = result.value;
