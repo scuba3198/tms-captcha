@@ -1,14 +1,14 @@
-import { solve_captcha } from "./evaluate";
+import { solveCaptcha } from "./evaluate";
 import { ResultTypes, SolveResult } from "./interface";
 
 const RELOAD_LIMIT = 10;
 const INITIAL_RETRY_LIMIT = 5;
 const RETRY_DELAY = 500; // ms
 
-let reload_counter = 0;
-let initial_retry_counter = 0;
+let reloadCounter = 0;
+let initialRetryCounter = 0;
 
-async function reload_captcha() {
+async function reloadCaptcha() {
   const reloadButton = document?.querySelector('[aria-label="Reload captcha"]');
   if (reloadButton) {
     reloadButton.dispatchEvent(new Event("click"));
@@ -33,29 +33,29 @@ async function waitForImageLoad(img: HTMLImageElement): Promise<boolean> {
 let latestRequestId = 0;
 
 function clearCaptchaField() {
-  const captcha_field = document.getElementById("captchaEnter") as HTMLInputElement;
-  if (captcha_field) {
-    captcha_field.value = "";
-    captcha_field.dispatchEvent(new Event("input"));
+  const captchaField = document.getElementById("captchaEnter") as HTMLInputElement | null;
+  if (captchaField) {
+    captchaField.value = "";
+    captchaField.dispatchEvent(new Event("input"));
     console.log("[TMSCaptcha] Input field cleared");
   }
 }
 
-async function handle_result(result: SolveResult) {
+async function handleResult(result: SolveResult) {
   switch (result.type) {
     case ResultTypes.Success: {
       console.log(`[TMSCaptcha] Solved: ${result.value}`);
 
       // Reset reload counter on successful solve
-      if (reload_counter > 0) {
-        console.log(`[TMSCaptcha] Resetting reload counter (was ${reload_counter})`);
-        reload_counter = 0;
+      if (reloadCounter > 0) {
+        console.log(`[TMSCaptcha] Resetting reload counter (was ${reloadCounter})`);
+        reloadCounter = 0;
       }
 
-      const captcha_field = document.getElementById("captchaEnter") as HTMLInputElement;
-      if (captcha_field) {
-        captcha_field.value = result.value;
-        captcha_field.dispatchEvent(new Event("input"));
+      const captchaField = document.getElementById("captchaEnter") as HTMLInputElement | null;
+      if (captchaField) {
+        captchaField.value = result.value;
+        captchaField.dispatchEvent(new Event("input"));
         console.log(`[TMSCaptcha] Input field updated with: ${result.value}`);
       }
       return;
@@ -74,25 +74,25 @@ async function handle_result(result: SolveResult) {
     }
   }
 
-  if (reload_counter > RELOAD_LIMIT) {
+  if (reloadCounter > RELOAD_LIMIT) {
     console.log(`[TMSCaptcha] Failed to solve and reloaded too many times!`);
     return;
   }
 
-  reload_counter++;
-  await reload_captcha();
+  reloadCounter++;
+  await reloadCaptcha();
 }
 
 async function processCaptcha(captchaImg: HTMLImageElement) {
   const currentRequestId = ++latestRequestId;
-  const captcha_blob_url = captchaImg.getAttribute("src");
+  const captchaBlobUrl = captchaImg.getAttribute("src");
 
-  if (!captcha_blob_url) {
+  if (!captchaBlobUrl) {
     console.log("[TMSCaptcha] No captcha URL found");
     return;
   }
 
-  if (captcha_blob_url.includes("captcha-image.jpg")) {
+  if (captchaBlobUrl.includes("captcha-image.jpg")) {
     console.log("[TMSCaptcha] Placeholder captcha detected - clearing field");
     clearCaptchaField();
     return;
@@ -101,13 +101,13 @@ async function processCaptcha(captchaImg: HTMLImageElement) {
   console.log(`[TMSCaptcha] Starting solve request #${currentRequestId}`);
 
   // Wait for the image to be fully loaded
-  const imageLoaded = await waitForImageLoad(captchaImg);
-  if (!imageLoaded) {
+  const hasImageLoaded = await waitForImageLoad(captchaImg);
+  if (!hasImageLoaded) {
     console.log(`[TMSCaptcha] Image #${currentRequestId} failed to load`);
     return;
   }
 
-  const result = await solve_captcha(captcha_blob_url);
+  const result = await solveCaptcha(captchaBlobUrl);
 
   // Race condition check: Only proceed if this is still the most recent request
   if (currentRequestId !== latestRequestId) {
@@ -115,16 +115,16 @@ async function processCaptcha(captchaImg: HTMLImageElement) {
     return;
   }
 
-  await handle_result(result);
+  await handleResult(result);
 }
 
 async function initializeCaptchaSolver() {
-  const captchaImg = document.querySelector('.form-control.captcha-image-dimension.col-10') as HTMLImageElement;
+  const captchaImg = document.querySelector('.form-control.captcha-image-dimension.col-10') as HTMLImageElement | null;
 
   if (!captchaImg) {
-    if (initial_retry_counter < INITIAL_RETRY_LIMIT) {
-      console.log(`[TMSCaptcha] Captcha element not found, retrying... (${initial_retry_counter + 1}/${INITIAL_RETRY_LIMIT})`);
-      initial_retry_counter++;
+    if (initialRetryCounter < INITIAL_RETRY_LIMIT) {
+      console.log(`[TMSCaptcha] Captcha element not found, retrying... (${initialRetryCounter + 1}/${INITIAL_RETRY_LIMIT})`);
+      initialRetryCounter++;
       setTimeout(initializeCaptchaSolver, RETRY_DELAY);
     } else {
       console.log("[TMSCaptcha] Failed to find captcha element after all retries");
@@ -163,7 +163,7 @@ initializeCaptchaSolver();
 
 // Also try again when the window loads (as a backup)
 window.addEventListener('load', () => {
-  if (initial_retry_counter < INITIAL_RETRY_LIMIT) {
+  if (initialRetryCounter < INITIAL_RETRY_LIMIT) {
     initializeCaptchaSolver();
   }
 });
