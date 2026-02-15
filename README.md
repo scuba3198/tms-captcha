@@ -6,6 +6,12 @@
   <img src="https://user-images.githubusercontent.com/46302068/215273678-4ba5f4fc-01b5-4ab6-bad9-429388e4d366.gif" width="450" alt="TMS Captcha Demo"/>
 </p>
 
+## ✨ New in v0.5.0
+- **TypeScript Best Practices**: Fully refactored codebase following industry-standard [best practices](https://github.com/andredesousa/typescript-best-practices). Includes strict typing, `camelCase` consistency, and improved code modularity.
+- **Automated Releases**: Integrated GitHub Actions to automatically build, package, and release both Chrome and Firefox extensions on every version tag.
+- **Fixed Load Issues**: Corrected manifest bundling to resolve "Could not load evaluate.js" errors in Brave/Chrome.
+- **Unique Artifacts**: Chrome and Firefox builds now produce distinct zip files in releases.
+
 ## ✨ New in v0.4.8
 - **High-Precision Model**: Upgraded from 5 to **9-factor spatial analysis**. Includes quadrant-level density checks for significantly better character recognition.
 - **Improved Resiliency**: Increased automatic re-solve attempts (up to 10) for distorted captchas.
@@ -45,7 +51,7 @@ The extracted 9-factor vector is compared against a local dataset (`bold_data.js
 
 ## 🚀 Installation
 
-1.  **Download** the latest `TMSCaptcha-chrome.zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
+1.  **Download** the latest `tmscaptcha-chrome-[version].zip` from the [Releases](https://github.com/scuba3198/tms-captcha/releases) page.
 2.  **Extract** the ZIP file to a folder.
 3.  Open Brave/Chrome and go to `brave://extensions` or `chrome://extensions`.
 4.  Enable **Developer mode**.
