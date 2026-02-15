@@ -42,10 +42,9 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
 manifest.version = pkg.version;
 
-// Note: Firefox manifest v2 doesn't need the same path adjustments as Chrome v3 for scripts
-// but we should ensure consistency if the manifest paths were changed.
-// In manifest.firefox.json, background script is already pointed to background.firefox.js? 
-// Let's check. Actually, esbuild output is what matters.
+// Correct paths for the bundled extension
+manifest.background.scripts = ['background.firefox.js'];
+manifest.content_scripts[0].js = ['content-script.js'];
 
 fs.writeFileSync(path.join(distDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 

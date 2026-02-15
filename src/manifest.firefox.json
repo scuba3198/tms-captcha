@@ -22,10 +22,7 @@
         "https://*.nepsetms.com.np/login"
       ],
       "js": [
-        "content-script.js",
-        "evaluate.js",
-        "bold_data.js",
-        "slim_data.js"
+        "content-script.js"
       ]
     }
   ],
