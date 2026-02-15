@@ -28,20 +28,18 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Chrome Extension
-        run: npm run build:chrome
-
-      - name: Create Zip
+      - name: Build and Zip Extensions
         run: |
-          cd dist-chrome
-          zip -r ../TMSCaptcha-chrome.zip *
-          cd ..
+          npm run build:chrome
+          npm run zip:chrome
+          npm run build:firefox
+          npm run zip:firefox
 
-      - name: Upload Artifact
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: TMSCaptcha-chrome
-          path: TMSCaptcha-chrome.zip
+          name: TMSCaptcha-Packages
+          path: web-ext-artifacts/*.zip
 
   release:
     name: "Tagged Release"
@@ -50,10 +48,11 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - name: Download Artifact
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: TMSCaptcha-chrome
+          name: TMSCaptcha-Packages
+          path: release-artifacts
 
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -61,4 +60,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            TMSCaptcha-chrome.zip
+            release-artifacts/*.zip
