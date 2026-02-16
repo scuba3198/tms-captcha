@@ -60,8 +60,11 @@ async function handleResult(result: SolveResult) {
         "captchaEnter",
       ) as HTMLInputElement | null;
       if (captchaField) {
+        captchaField.focus();
         captchaField.value = result.value;
-        captchaField.dispatchEvent(new Event("input"));
+        captchaField.dispatchEvent(new Event("input", { bubbles: true }));
+        captchaField.dispatchEvent(new Event("change", { bubbles: true }));
+        captchaField.blur();
         console.log(`[TMSCaptcha] Input field updated with: ${result.value}`);
       }
       return;
@@ -95,7 +98,7 @@ async function handleResult(result: SolveResult) {
 
 async function processCaptcha(captchaImg: HTMLImageElement) {
   const currentRequestId = ++latestRequestId;
-  const captchaBlobUrl = captchaImg.getAttribute("src");
+  const captchaBlobUrl = captchaImg.src; // Use full URL
 
   if (!captchaBlobUrl) {
     console.log("[TMSCaptcha] No captcha URL found");

@@ -16,14 +16,18 @@ declare const browser: WebExtensionApi | undefined;
 declare const chrome: WebExtensionApi | undefined;
 
 if (typeof window === "object") {
-  if (browser?.runtime) {
+  // biome-ignore lint/complexity/useOptionalChain: Needed for safe cross-browser check
+  if (typeof browser !== "undefined" && browser?.runtime) {
     // Firefox
     EMPTY_PATH = browser.runtime.getURL(EMPTY_PATH);
     DATA_PATH = browser.runtime.getURL(DATA_PATH);
-  } else if (chrome?.runtime) {
-    // Chrome
-    EMPTY_PATH = chrome.runtime.getURL(EMPTY_PATH);
-    DATA_PATH = chrome.runtime.getURL(DATA_PATH);
+  } else {
+    // biome-ignore lint/complexity/useOptionalChain: Needed for safe cross-browser check
+    if (typeof chrome !== "undefined" && chrome?.runtime) {
+      // Chrome
+      EMPTY_PATH = chrome.runtime.getURL(EMPTY_PATH);
+      DATA_PATH = chrome.runtime.getURL(DATA_PATH);
+    }
   }
 } else {
   EMPTY_PATH = `./src/${EMPTY_PATH}`;
