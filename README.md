@@ -6,7 +6,7 @@
   <img src="https://user-images.githubusercontent.com/46302068/215273678-4ba5f4fc-01b5-4ab6-bad9-429388e4d366.gif" width="450" alt="TMS Captcha Demo"/>
 </p>
 
-## ✨ New in v0.5.0
+## ✨ New in v0.5.1
 - **Strictest TypeScript**: Migrated to `@tsconfig/strictest` for maximum type safety and industry-standard [best practices](https://github.com/andredesousa/typescript-best-practices).
 - **Biome Integration**: Switched to [Biome](https://biomejs.dev/) for blazing-fast linting and formatting, replacing ESLint/Prettier.
 - **Automated Releases**: Integrated GitHub Actions to automatically build, package, and release both Chrome and Firefox extensions on every version tag.
