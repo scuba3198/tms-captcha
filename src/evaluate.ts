@@ -2,20 +2,25 @@ import { Image } from "image-js";
 
 import DATA_BOLD from "./data/bold_data.json";
 import DATA_SLIM from "./data/slim_data.json";
-import { ResultTypes, SolveResult } from "./interface";
+import { ResultTypes, type SolveResult } from "./interface";
 
 let EMPTY_PATH = "assets/empty.jpg";
 let DATA_PATH = "data";
 
-declare const browser: any;
-declare const chrome: any;
+interface WebExtensionApi {
+  runtime: {
+    getURL(path: string): string;
+  };
+}
+declare const browser: WebExtensionApi | undefined;
+declare const chrome: WebExtensionApi | undefined;
 
 if (typeof window === "object") {
-  if (typeof browser !== "undefined") {
+  if (browser?.runtime) {
     // Firefox
     EMPTY_PATH = browser.runtime.getURL(EMPTY_PATH);
     DATA_PATH = browser.runtime.getURL(DATA_PATH);
-  } else if (typeof chrome !== "undefined") {
+  } else if (chrome?.runtime) {
     // Chrome
     EMPTY_PATH = chrome.runtime.getURL(EMPTY_PATH);
     DATA_PATH = chrome.runtime.getURL(DATA_PATH);
@@ -29,7 +34,7 @@ const FACTORS = [1, 2, 2, 2, 4, 3, 3, 3, 3];
 
 enum Kind {
   Bold,
-  Slim
+  Slim,
 }
 
 async function solveCaptcha(
@@ -51,31 +56,44 @@ async function solveCaptcha(
 
   for (let i = 0; i < captchaValue.length; i++) {
     const item = captchaValue[i];
-    const similarities = Object.entries(data).map(([char, properties]): [string, number] => {
-      let absSum = 0;
+    if (!item) continue;
+    const similarities = Object.entries(data).map(
+      ([char, properties]): [string, number] => {
+        let absSum = 0;
 
-      properties.forEach((prop, index) => {
-        absSum += (FACTORS[index] || 1) * Math.abs(prop - item[index]);
-      });
+        properties.forEach((prop, index) => {
+          const itemVal = item[index];
+          if (typeof itemVal === "number") {
+            absSum += (FACTORS[index] || 1) * Math.abs(prop - itemVal);
+          }
+        });
 
-      return [char, absSum];
-    });
+        return [char, absSum];
+      },
+    );
 
     const sortedValues = similarities.sort((a, b) => a[1] - b[1]);
 
     // Increased threshold slightly due to more factors (9 instead of 5)
-    if (sortedValues[0][1] > 100 || sortedValues[1][1] - sortedValues[0][1] < 5) {
+    const firstVal = sortedValues[0];
+    const secondVal = sortedValues[1];
+
+    if (
+      !firstVal ||
+      !secondVal ||
+      firstVal[1] > 100 ||
+      secondVal[1] - firstVal[1] < 5
+    ) {
       if (typeof kind !== "undefined") {
         return {
           type: ResultTypes.LowConfidence,
           value: captcha,
         };
-      } else {
-        return solveCaptcha(captchaUri, Kind.Slim);
       }
+      return solveCaptcha(captchaUri, Kind.Slim);
     }
 
-    captcha += sortedValues[0][0];
+    captcha += firstVal[0];
   }
 
   if (captchaValue.length === 6) {
@@ -197,7 +215,11 @@ async function cleanImage(img: Image): Promise<Image> {
   return cleaned;
 }
 
-function calculateQuadrantAvg(charImg: Image, isLeft: boolean, isTop: boolean): number {
+function calculateQuadrantAvg(
+  charImg: Image,
+  isLeft: boolean,
+  isTop: boolean,
+): number {
   const midX = Math.floor(charImg.width / 2);
   const midY = Math.floor(charImg.height / 2);
 

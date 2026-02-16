@@ -11,31 +11,21 @@
     "96": "assets/icon-96.png"
   },
   "background": {
-    "scripts": [
-      "background.firefox.js"
-    ],
+    "scripts": ["background.firefox.js"],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://*.nepsetms.com.np/login"
-      ],
-      "js": [
-        "content-script.js"
-      ]
+      "matches": ["https://*.nepsetms.com.np/login"],
+      "js": ["content-script.js"]
     }
   ],
-  "web_accessible_resources": [
-    "assets/empty.jpg"
-  ],
+  "web_accessible_resources": ["assets/empty.jpg"],
   "browser_specific_settings": {
     "gecko": {
       "id": "tmscaptcha@arpankoirala.com.np",
       "strict_min_version": "100.0"
     }
   },
-  "permissions": [
-    "https://*.nepsetms.com.np/*"
-  ]
+  "permissions": ["https://*.nepsetms.com.np/*"]
 }

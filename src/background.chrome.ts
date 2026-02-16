@@ -1,1 +1,1 @@
-console.log('TMS Captcha Background Service Worker Loaded');
+console.log("TMS Captcha Background Service Worker Loaded");

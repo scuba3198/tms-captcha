@@ -5,9 +5,11 @@ export enum ResultTypes {
 }
 
 export interface SolveResult {
-  type: ResultTypes, value?: string,
+  type: ResultTypes;
+  value: string;
 }
 
 export interface KindEntry {
-  write_name: string, data_path: string,
+  write_name: string;
+  data_path: string;
 }

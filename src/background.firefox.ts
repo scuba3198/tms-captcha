@@ -3,5 +3,5 @@
 // It handles browser extension lifecycle events
 
 browser.runtime.onInstalled.addListener(() => {
-  console.log('TMSCaptcha extension installed');
+  console.log("TMSCaptcha extension installed");
 });

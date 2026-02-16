@@ -1,20 +1,14 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "module": "commonjs",
     "target": "es6",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "rootDir": "src",
     "outDir": "dist/js",
-    "noEmitOnError": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
-  }
+    "noEmit": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts"]
 }

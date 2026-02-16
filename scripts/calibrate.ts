@@ -1,23 +1,24 @@
-import fs from "fs";
-import {Image} from "image-js";
+import fs from "node:fs";
+import { Image } from "image-js";
 
-import {evaluate_captcha} from "../src/evaluate";
-import {KindEntry} from "../src/interface";
-import {kinds} from "../src/kinds";
+import { evaluateCaptcha } from "../src/evaluate";
+import type { KindEntry } from "../src/interface";
+import { kinds } from "../src/kinds";
 
-Object.values(kinds).map((kind: KindEntry) => {
-  let files = fs.readdirSync(kind.data_path);
+Object.values(kinds).forEach((kind: KindEntry) => {
+  const files = fs.readdirSync(kind.data_path);
 
-  let data: Map<string, Array<Array<number>>> = new Map();
+  const data: Map<string, Array<Array<number>>> = new Map();
 
-  let promises = files.map(async (filename) => {
-    let img = await Image.load(`${kind.data_path}/${filename}`);
+  const promises = files.map(async (filename) => {
+    const img = await Image.load(`${kind.data_path}/${filename}`);
 
-    let res = await evaluate_captcha(img);
+    const res = await evaluateCaptcha(img);
 
-    if (res.length == 6) {
-      res.map((item, index) => {
-        let char: string = filename[index];
+    if (res.length === 6) {
+      res.forEach((item, index) => {
+        const char: string | undefined = filename[index];
+        if (!char) return;
 
         if (!data.get(char)) {
           data.set(char, []);
@@ -31,27 +32,30 @@ Object.values(kinds).map((kind: KindEntry) => {
   });
 
   Promise.all(promises).then(() => {
-    let averaged_data: Map<string, Array<number>> = new Map();
+    const averaged_data: Map<string, Array<number>> = new Map();
 
     data.forEach((value, key: string) => {
       if (value.length > 1) {
         let sums = value.reduce((acc, new_val) => {
-          let temp_summed =
-              acc.map((item, index) => { return item + new_val[index]; });
-
-          return temp_summed;
+          return acc.map((item, index) => {
+            const newValVal = new_val[index];
+            return item + (newValVal ?? 0);
+          });
         });
 
         sums = sums.map((item) => item / value.length);
 
         averaged_data.set(key, sums);
       } else {
-        averaged_data.set(key, value[0]);
+        const firstVal = value[0];
+        if (firstVal) {
+          averaged_data.set(key, firstVal);
+        }
       }
     });
 
-    let json_data = (JSON.stringify(Object.fromEntries(averaged_data)));
+    const json_data = JSON.stringify(Object.fromEntries(averaged_data));
 
     fs.writeFileSync(`src/data/${kind.write_name}`, json_data);
   });
-})
+});

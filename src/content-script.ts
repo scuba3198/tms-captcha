@@ -1,5 +1,5 @@
 import { solveCaptcha } from "./evaluate";
-import { ResultTypes, SolveResult } from "./interface";
+import { ResultTypes, type SolveResult } from "./interface";
 
 const RELOAD_LIMIT = 10;
 const INITIAL_RETRY_LIMIT = 5;
@@ -33,7 +33,9 @@ async function waitForImageLoad(img: HTMLImageElement): Promise<boolean> {
 let latestRequestId = 0;
 
 function clearCaptchaField() {
-  const captchaField = document.getElementById("captchaEnter") as HTMLInputElement | null;
+  const captchaField = document.getElementById(
+    "captchaEnter",
+  ) as HTMLInputElement | null;
   if (captchaField) {
     captchaField.value = "";
     captchaField.dispatchEvent(new Event("input"));
@@ -48,11 +50,15 @@ async function handleResult(result: SolveResult) {
 
       // Reset reload counter on successful solve
       if (reloadCounter > 0) {
-        console.log(`[TMSCaptcha] Resetting reload counter (was ${reloadCounter})`);
+        console.log(
+          `[TMSCaptcha] Resetting reload counter (was ${reloadCounter})`,
+        );
         reloadCounter = 0;
       }
 
-      const captchaField = document.getElementById("captchaEnter") as HTMLInputElement | null;
+      const captchaField = document.getElementById(
+        "captchaEnter",
+      ) as HTMLInputElement | null;
       if (captchaField) {
         captchaField.value = result.value;
         captchaField.dispatchEvent(new Event("input"));
@@ -62,13 +68,17 @@ async function handleResult(result: SolveResult) {
     }
 
     case ResultTypes.LowConfidence: {
-      console.log(`[TMSCaptcha] Failed to solve due to low confidence. Cleaning field and reloading.`);
+      console.log(
+        `[TMSCaptcha] Failed to solve due to low confidence. Cleaning field and reloading.`,
+      );
       clearCaptchaField();
       break;
     }
 
     case ResultTypes.InvalidLength: {
-      console.log(`[TMSCaptcha] Found result "${result.value}" but length < 6. Cleaning field and reloading.`);
+      console.log(
+        `[TMSCaptcha] Found result "${result.value}" but length < 6. Cleaning field and reloading.`,
+      );
       clearCaptchaField();
       break;
     }
@@ -111,7 +121,9 @@ async function processCaptcha(captchaImg: HTMLImageElement) {
 
   // Race condition check: Only proceed if this is still the most recent request
   if (currentRequestId !== latestRequestId) {
-    console.log(`[TMSCaptcha] Ignoring stale result for request #${currentRequestId} (Current is #${latestRequestId})`);
+    console.log(
+      `[TMSCaptcha] Ignoring stale result for request #${currentRequestId} (Current is #${latestRequestId})`,
+    );
     return;
   }
 
@@ -119,15 +131,21 @@ async function processCaptcha(captchaImg: HTMLImageElement) {
 }
 
 async function initializeCaptchaSolver() {
-  const captchaImg = document.querySelector('.form-control.captcha-image-dimension.col-10') as HTMLImageElement | null;
+  const captchaImg = document.querySelector(
+    ".form-control.captcha-image-dimension.col-10",
+  ) as HTMLImageElement | null;
 
   if (!captchaImg) {
     if (initialRetryCounter < INITIAL_RETRY_LIMIT) {
-      console.log(`[TMSCaptcha] Captcha element not found, retrying... (${initialRetryCounter + 1}/${INITIAL_RETRY_LIMIT})`);
+      console.log(
+        `[TMSCaptcha] Captcha element not found, retrying... (${initialRetryCounter + 1}/${INITIAL_RETRY_LIMIT})`,
+      );
       initialRetryCounter++;
       setTimeout(initializeCaptchaSolver, RETRY_DELAY);
     } else {
-      console.log("[TMSCaptcha] Failed to find captcha element after all retries");
+      console.log(
+        "[TMSCaptcha] Failed to find captcha element after all retries",
+      );
     }
     return;
   }
@@ -140,9 +158,13 @@ async function initializeCaptchaSolver() {
   // Set up observer for future changes
   const observer = new MutationObserver(async (mutations) => {
     for (const mutation of mutations) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
-        const newSrc = (mutation.target as HTMLImageElement).getAttribute('src');
-        console.log(`[TMSCaptcha] Image src changed to: ${newSrc?.substring(0, 50)}...`);
+      if (mutation.type === "attributes" && mutation.attributeName === "src") {
+        const newSrc = (mutation.target as HTMLImageElement).getAttribute(
+          "src",
+        );
+        console.log(
+          `[TMSCaptcha] Image src changed to: ${newSrc?.substring(0, 50)}...`,
+        );
 
         // IMPORTANT: Clear the field immediately when the image starts changing
         clearCaptchaField();
@@ -154,7 +176,7 @@ async function initializeCaptchaSolver() {
 
   observer.observe(captchaImg, {
     attributes: true,
-    attributeFilter: ['src']
+    attributeFilter: ["src"],
   });
 }
 
@@ -162,7 +184,7 @@ async function initializeCaptchaSolver() {
 initializeCaptchaSolver();
 
 // Also try again when the window loads (as a backup)
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
   if (initialRetryCounter < INITIAL_RETRY_LIMIT) {
     initializeCaptchaSolver();
   }
