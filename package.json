@@ -30,6 +30,8 @@
     "zip:all": "npm run zip:chrome && npm run zip:firefox",
     "publish:firefox": "npm run build:firefox && npm run zip:firefox && cd dist-firefox && web-ext sign --api-key=$MOZILLA_JWT_ISSUER --api-secret=$MOZILLA_JWT_SECRET --channel=listed --artifacts-dir=../web-ext-artifacts",
     "calibrate": "ts-node scripts/calibrate.ts",
-    "test": "ts-node scripts/test.ts"
+    "test": "ts-node scripts/test.ts",
+    "lint": "biome check .",
+    "format": "biome check --write ."
   }
 }

@@ -7,10 +7,10 @@
 </p>
 
 ## ✨ New in v0.5.0
-- **TypeScript Best Practices**: Fully refactored codebase following industry-standard [best practices](https://github.com/andredesousa/typescript-best-practices). Includes strict typing, `camelCase` consistency, and improved code modularity.
+- **Strictest TypeScript**: Migrated to `@tsconfig/strictest` for maximum type safety and industry-standard [best practices](https://github.com/andredesousa/typescript-best-practices).
+- **Biome Integration**: Switched to [Biome](https://biomejs.dev/) for blazing-fast linting and formatting, replacing ESLint/Prettier.
 - **Automated Releases**: Integrated GitHub Actions to automatically build, package, and release both Chrome and Firefox extensions on every version tag.
 - **Fixed Load Issues**: Corrected manifest bundling to resolve "Could not load evaluate.js" errors in Brave/Chrome.
-- **Unique Artifacts**: Chrome and Firefox builds now produce distinct zip files in releases.
 
 ## ✨ New in v0.4.8
 - **High-Precision Model**: Upgraded from 5 to **9-factor spatial analysis**. Includes quadrant-level density checks for significantly better character recognition.
@@ -68,12 +68,19 @@ If you want to build the extension manually:
     ```
 2.  **Install** dependencies:
     ```bash
-    npm install  # or yarn install
+    npm install
     ```
 3.  **Build** the extension:
     *   **Chrome/Brave**: `npm run build:chrome`
     *   **Firefox**: `npm run build:firefox`
     *   **Both**: `npm run build:all`
+
+### Linting & Formatting
+We use Biome for code quality:
+```bash
+npm run lint    # Check for linting/formatting issues
+npm run format  # Automatically fix issues
+```
 
 ### Loading the Build
 After building, click **Load unpacked** in your browser's extension settings and select the **`dist-chrome`** directory.
@@ -88,7 +95,7 @@ After building, click **Load unpacked** in your browser's extension settings and
     ```
 3.  Run the publish command:
     ```bash
-    npm run publish:firefox  # or yarn publish:firefox
+    npm run publish:firefox
     ```
 
 ---
