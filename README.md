@@ -6,7 +6,7 @@
   <img src="https://user-images.githubusercontent.com/46302068/215273678-4ba5f4fc-01b5-4ab6-bad9-429388e4d366.gif" width="450" alt="TMS Captcha Demo"/>
 </p>
 
-## ✨ New in v0.7.0
+## ✨ New in v0.7.1
 - **Lead Engineer Standards**: Brought the project into full compliance with "Bugs Prevented by Design" global rules, ensuring strict build-time guarantees and isolated side effects.
 - **Structured JSON Logging**: Replaced `console.log` with a custom, structured JSON logger in `src/logger.ts`, featuring automatic PII redaction and consistent observability.
 - **Improved Selector Resiliency**: Implemented flexible CSS selectors and fallback logic to survive site-side UI updates.
