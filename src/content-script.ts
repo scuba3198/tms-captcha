@@ -1,4 +1,5 @@
 import { CONFIG } from "./constants";
+import { solveCaptcha } from "./evaluate";
 import { ResultTypes, type SolveResult } from "./interface";
 import { logger } from "./logger";
 
