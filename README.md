@@ -7,10 +7,11 @@
 </p>
 
 ## ✨ New in v0.5.2
-- **Strictest TypeScript**: Migrated to `@tsconfig/strictest` for maximum type safety and industry-standard [best practices](https://github.com/andredesousa/typescript-best-practices).
-- **Biome Integration**: Switched to [Biome](https://biomejs.dev/) for blazing-fast linting and formatting, replacing ESLint/Prettier.
-- **Automated Releases**: Integrated GitHub Actions to automatically build, package, and release both Chrome and Firefox extensions on every version tag.
-- **Fixed Load Issues**: Corrected manifest bundling to resolve "Could not load evaluate.js" errors in Brave/Chrome.
+- **Lead Engineer Standards**: Brought the project into full compliance with "Bugs Prevented by Design" global rules, ensuring strict build-time guarantees and isolated side effects.
+- **Structured JSON Logging**: Replaced `console.log` with a custom, structured JSON logger in `src/logger.ts`, featuring automatic PII redaction and consistent observability.
+- **Improved Selector Resiliency**: Implemented flexible CSS selectors and fallback logic to survive site-side UI updates.
+- **Domain Primitive Safety**: Introduced `Captcha` brand types in TypeScript to make invalid states unrepresentable and prevent accidental domain misuse.
+- **CI/CD Quality Gates**: Enforced mandatory linting and character accuracy tests in the GitHub Actions pipeline—builds now fail if quality standards aren't met.
 
 ## ✨ New in v0.4.8
 - **High-Precision Model**: Upgraded from 5 to **9-factor spatial analysis**. Includes quadrant-level density checks for significantly better character recognition.
@@ -45,7 +46,9 @@ The extracted 9-factor vector is compared against a local dataset (`bold_data.js
 ### 5. Browser Integration
 - **MutationObserver**: Monitors the DOM for captcha image refreshes.
 - **Request Tracking**: Uses incrementing Request IDs to prevent race conditions where a slow solve for an old captcha might overwrite a newer one.
-- **Input Simulation**: Dispatches native `input` events after filling the field to ensure the underlying React/Angular state of the TMS site is updated.
+- **Input Simulation**: Dispatches native `input` and `change` events after filling the field to ensure the underlying React/Angular state of the TMS site is updated.
+- **Structured Logging & Redaction**: All operational logs are exported as structured JSON. A built-in sanitization layer automatically redacts any strings that look like secrets or sensitive tokens.
+- **Domain Priming**: Uses TypeScript brand types for CAPTCHA strings, ensuring they are validated and treated as a distinct type throughout the pipeline.
 
 </details>
 

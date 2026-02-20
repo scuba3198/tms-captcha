@@ -28,6 +28,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Enforce Linting
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm test
+
       - name: Build and Zip Extensions
         run: |
           npm run build:chrome

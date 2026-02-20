@@ -4,9 +4,18 @@ export enum ResultTypes {
   InvalidLength,
 }
 
+/**
+ * Brand type to ensure CAPTCHA strings are treated as a distinct domain primitive.
+ */
+export type Captcha = string & { __brand: "Captcha" };
+
+export function asCaptcha(value: string): Captcha {
+  return value as Captcha;
+}
+
 export interface SolveResult {
   type: ResultTypes;
-  value: string;
+  value: Captcha;
 }
 
 export interface KindEntry {
