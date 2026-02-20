@@ -41,10 +41,10 @@ enum Kind {
   Slim,
 }
 
-export const solveCaptcha = async (
+async function solveCaptcha(
   captchaUri: string,
   kind?: Kind,
-): Promise<SolveResult> => {
+): Promise<SolveResult> {
   let data: Record<string, number[]>;
 
   if (kind === Kind.Bold || !kind) {
@@ -125,7 +125,7 @@ Then each character is evalauated based on 9 factors:
   - Bottom Left Quadrant Average
   - Bottom Right Quadrant Average
 */
-export const evaluateCaptcha = async (img: Image): Promise<number[][]> => {
+async function evaluateCaptcha(img: Image): Promise<number[][]> {
   const cleaned = await cleanImage(img);
 
   let counter = 0;
@@ -314,4 +314,4 @@ function calculateVAvg(charImg: Image): number {
   );
 }
 
-// No explicit export needed as they are exported inline
+export { solveCaptcha, evaluateCaptcha };

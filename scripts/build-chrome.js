@@ -25,7 +25,7 @@ try {
 console.log("Building content script...");
 try {
   execSync(
-    `npx -y esbuild "${path.join(srcDir, "content-script.ts")}" --bundle --outfile="${path.join(distDir, "content-script.js")}" --platform=browser --minify`,
+    `npx -y esbuild "${path.join(srcDir, "content-script.ts")}" --bundle --outfile="${path.join(distDir, "content-script.js")}" --platform=browser`,
     { stdio: "inherit" },
   );
 } catch (_e) {
